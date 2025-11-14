@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = credentials('Amanuxsource')
+        DOCKERHUB_USER = credentials('6f1f115c-6dc3-403b-a16c-c45bc86ec4fb')
         DOCKERHUB_PASS = credentials('Amanpreet#8979')
         IMAGE = "Amanuxsource/amazon-clone"
     }
