@@ -2,12 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB = credentials('6f1f115c-6dc3-403b-a16c-c45bc86ec4fb')
-        IMAGE = "Amanuxsource/amazon-clone"
+        IMAGE = "amanuxsource/amazon-clone"
     }
 
-    stages {
-
+    stages{
         stage('Clone Repo') {
             steps {
                 git 'https://github.com/Aman-ux-source/amazon-clone.git'
@@ -20,21 +18,22 @@ pipeline {
             }
         }
 
-        stage('Push Image to Docker Hub') {
+        stage('Push Image to DockerHub') {
             steps {
-                sh "echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin"
-                sh "docker push $IMAGE:latest"
+                withCredentials([usernamePassword(credentialsId: '6f1f115c-6dc3-403b-a16c-c45bc86ec4fb', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh "echo $PASS | docker login -u $USER --password-stdin"
+                    sh "docker push $IMAGE:latest"
+                }
             }
         }
 
         stage('Deploy Container') {
             steps {
                 sh '''
-                    docker rm -f amazon || true
-                    docker run -d --name amazon -p 8080:80 $IMAGE:latest
+                    docker rm -f amazonclone || true
+                    docker run -d --name amazonclone -p 8080:80 amanuxsource/amazon-clone:latest
                 '''
             }
         }
     }
 }
-
