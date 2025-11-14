@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_USER = credentials('docker-username')
+        DOCKERHUB_PASS = credentials('docker-password')
+        IMAGE = "yourdockerhubusername/mywebsite"
+    }
+
+    stages {
+
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/YOURUSERNAME/my-static-website.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t $IMAGE:latest ."
+            }
+        }
+
+        stage('Push Image to Docker Hub') {
+            steps {
+                sh "echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin"
+                sh "docker push $IMAGE:latest"
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                sh '''
+                    docker rm -f mywebsite || true
+                    docker run -d --name mywebsite -p 8080:80 $IMAGE:latest
+                '''
+            }
+        }
+    }
+}
+
