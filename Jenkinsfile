@@ -31,7 +31,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f amazonclone || true
-                    docker run -d --name amazonclone -p 8080:80 amanuxsource/amazon-clone:latest
+                    docker run -d --name amazonclone -p 8085:80 amanuxsource/amazon-clone:latest
                 '''
             }
         }
