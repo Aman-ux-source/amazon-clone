@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = credentials('docker-username')
-        DOCKERHUB_PASS = credentials('docker-password')
-        IMAGE = "yourdockerhubusername/mywebsite"
+        DOCKERHUB_USER = credentials('Amanuxsource')
+        DOCKERHUB_PASS = credentials('Amanpreet#8979')
+        IMAGE = "Amanuxsource/amazon-clone"
     }
 
     stages {
 
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/YOURUSERNAME/my-static-website.git'
+                git 'https://github.com/Aman-ux-source/amazon-clone.git'
             }
         }
 
@@ -31,8 +31,8 @@ pipeline {
         stage('Deploy Container') {
             steps {
                 sh '''
-                    docker rm -f mywebsite || true
-                    docker run -d --name mywebsite -p 8080:80 $IMAGE:latest
+                    docker rm -f amazon || true
+                    docker run -d --name amazon -p 8080:80 $IMAGE:latest
                 '''
             }
         }
